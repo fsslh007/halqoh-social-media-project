@@ -15,6 +15,8 @@ return new class extends Migration
     {
         Schema::create('likes', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('post_id')->constrained('posts');
+            $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
         });
     }
@@ -26,6 +28,10 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('likes');
+        Schema::dropIfExists('likes', function (Blueprint $table) {
+        	$table->dropForeign('posts_user_id_foreign');
+	        $table->dropForeign('posts_post_id_foreign');
+		});
+
     }
 };
